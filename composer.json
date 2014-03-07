@@ -4,7 +4,7 @@
     "description": "Promises in PHP using pthreads v1.0.0+",
     "keywords": ["promises", "pthreads"],
     "homepage": "http://pthreads.org/",
-    "license": "MIT",
+    "license": "PHP",
     "authors": [
         {
             "name": "Joe Watkins",
