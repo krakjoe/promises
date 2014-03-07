@@ -18,7 +18,7 @@ namespace {
 	class ProcessError extends Thenable {
 		
 		public function onError(Stackable $promised) {
-			printf("Errors !!");
+			printf("Errors !!\n");
 		}
 	}
 
