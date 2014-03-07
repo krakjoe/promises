@@ -1,5 +1,5 @@
 {
-    "name": "pthreads/promises",
+    "name": "krakjoe/promises",
     "type": "library",
     "description": "Promises in PHP using pthreads v1.0.0+",
     "keywords": ["promises", "pthreads"],
