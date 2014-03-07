@@ -29,8 +29,12 @@ namespace pthreads {
 		public function onProgress(\Stackable $promised)  {}
 
 		public function run() {
-			$promised = $this->promise->get();
+			$promised = $this	
+				->promise
+				->getPromised();
+				
 			$this->onProgress($promised);
+			
 			if ($promised->isTerminated()) {
 				$this->onError($promised);
 			} else $this->onComplete($promised);

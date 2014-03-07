@@ -17,19 +17,15 @@
   +----------------------------------------------------------------------+
  */
 namespace pthreads {
-
+	
 	class PromiseManager extends \Pool {
 		
 		public function __construct($size = 4, $worker = PromiseWorker::class, $ctor = []) {
 			parent::__construct(
 				$size, $worker, $ctor);
 		}
-		
-		public function getManager($worker) { 
-			return $this->workers[$worker];
-		}
 
-		public function manage(Promise $promise, Fulfillable $fulfill) {
+		public function manage(Promise &$promise, Fulfillable &$fulfill) {
 			return new Promise(
 				[$this, $promise->getWorker()], $fulfill);
 		}

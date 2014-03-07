@@ -18,8 +18,8 @@
  */
 namespace pthreads {
 
-	class Promise {
-	
+	class Promise extends \Stackable {
+
 		public function __construct($manager, \Stackable $promised) {
 			if (is_array($manager)) {
 				$this->worker = $manager[1];
@@ -33,19 +33,20 @@ namespace pthreads {
 			}
 			$this->promised = $promised;
 		}
-	
+
 		public function then(Thenable $fulfill) {
 			return $this->manager
 				->manage($this, $fulfill);
 		}
-	
-		public function get($member = null) {
-			if (isset($member)) {
-				return $this->promised[$member]; 
-			} else return $this->promised;
+		
+		public function getWorker() 				{ return $this->worker;	}
+		public function getManager()				{ return $this->manager; }
+		public function getPromised($key = null)	{
+			if ($key != null)
+				return $this->promised[$key];
+			return $this->promised;
 		}
-		public function getWorker() 	{ return $this->worker;	}
-	
+		
 		protected $manager;
 		protected $worker;
 		protected $promised;
