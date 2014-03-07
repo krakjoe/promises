@@ -18,7 +18,7 @@
  */
 namespace pthreads {
 
-	class Promise extends \Stackable {
+	final class Promise extends \Stackable {
 
 		public function __construct($manager, \Stackable $promised) {
 			if (is_array($manager)) {

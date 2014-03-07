@@ -20,17 +20,21 @@ namespace pthreads {
 	
 	abstract class Thenable extends \Stackable implements Fulfillable {
 
-		public function __construct(Promise $promise) {
+		final public function __construct(Promise $promise) {
 			$this->promise = $promise;
 		}
 
-		public function onComplete(\Stackable $promised)  {}
-		public function onError(\Stackable $promised)     {}
-		public function onProgress(\Stackable $promised)  {}
+		public function onComplete(\Stackable $promised) {}
+		public function onError(\Stackable $promised) {}
+		public function onProgress(\Stackable $promised) {}
 
-		public function run() {
+		final public function getPromise() { 
+			return $this->promise; 
+		}
+
+		final public function run() {
 			$promised = $this	
-				->promise
+				->getPromise()
 				->getPromised();
 				
 			$this->onProgress($promised);
@@ -39,7 +43,7 @@ namespace pthreads {
 				$this->onError($promised);
 			} else $this->onComplete($promised);
 		}
-	
+
 		protected $promise;
 	}
 }
