@@ -19,4 +19,4 @@ $promise
 		new PrintMeaning($promise));
 
 $manager->shutdown();
-	```
+```

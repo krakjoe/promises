@@ -23,13 +23,14 @@ namespace pthreads {
 		public function __construct(Promise $promise) {
 			$this->promise = $promise;
 		}
-	
+
 		abstract public function onComplete(\Stackable $promised);
 		abstract public function onError(\Stackable $promised);
 		abstract public function onProgress(\Stackable $promised);
-	
+
 		public function run() {
 			$promised = $this->promise->get();
+			$this->onProgress($promised);
 			if ($promised->isTerminated()) {
 				$this->onError($promised);
 			} else $this->onComplete($promised);
