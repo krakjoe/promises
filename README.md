@@ -1,7 +1,7 @@
 promises
 ========
 
-Promises in PHP
+Promises in PHP using **pthreads v1.0.0+**
 
 Example Code
 ============
