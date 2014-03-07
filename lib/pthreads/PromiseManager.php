@@ -19,8 +19,7 @@
 namespace pthreads {
 	
 	class PromiseManager extends \Pool {
-		
-		public function __construct($size = 4, $worker = PromiseWorker::class, $ctor = []) {
+		public function __construct($size = 4, $worker = \Worker::class, $ctor = []) {
 			parent::__construct(
 				$size, $worker, $ctor);
 		}
