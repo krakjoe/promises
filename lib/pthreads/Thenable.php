@@ -24,9 +24,9 @@ namespace pthreads {
 			$this->promise = $promise;
 		}
 
-		abstract public function onComplete(\Stackable $promised);
-		abstract public function onError(\Stackable $promised);
-		abstract public function onProgress(\Stackable $promised);
+		public function onComplete(\Stackable $promised)  {}
+		public function onError(\Stackable $promised)     {}
+		public function onProgress(\Stackable $promised)  {}
 
 		public function run() {
 			$promised = $this->promise->get();
