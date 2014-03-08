@@ -10,7 +10,7 @@ The Promise Manager represents a pool of threads used to fulfill promises asynch
 
 The only public API for the Promise Manager is the constructor:
 
-```public function __construct($size = 4, $worker = \Worker::class, $ctor = [])```
+	public function __construct($size = 4, $worker = \Worker::class, $ctor = [])
 
 See Pool::__construct in the PHP manual; it is inherited from Pool.
 
@@ -19,23 +19,23 @@ Promise
 
 A Promise represents a promise to execute the public interface of a Promisable at some time in the future:
 
-```public function Promise Promise::__construct(PromiseManager $manager, Promisable $promisable)```
+	public Promise Promise::__construct(PromiseManager $manager, Promisable $promisable)
 
 A Promise provides the ability to schedule the subsequent execution of the public interface of a Thenable.
 
-```public function Promise Promise::then(Thenable $then)```
+	public Promise Promise::then(Thenable $then)
 
 Interfaces
 ==========
 
 IPromisable
 
-	- ```public void IPromisable::onFulfill();```
+	public void IPromisable::onFulfill();
 
 IThenable
 	
-	- ```public void IThenable::onComplete(Promisable $promised);```
-	- ```public void IThenable::onError(Promisable $promised);```
+	public void IThenable::onComplete(Promisable $promised);
+	public void IThenable::onError(Promisable $promised);
 
 Notes
 =====
