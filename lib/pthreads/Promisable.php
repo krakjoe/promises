@@ -25,26 +25,28 @@ namespace pthreads {
 		public function onFulfill() {}
 		
 		public function run() {
+			$this->setState(PROMISABLE::PENDING);
 			try {
-				$this
-					->onFulfill();
-				$this
-					->setState(PROMISABLE::FULFILLED);
+				$this->onFulfill();
 			} catch (\Exception $ex) {
-				$this
-					->setState(PROMISABLE::FAILED, $ex);
+				$this->setState(PROMISABLE::FAILED, $ex);
+			} finally {
+				switch ($this->state) {
+					case PROMISABLE::PENDING:
+					case null:
+						$this->setState(PROMISABLE::FULFILLED);
+					break;
+				}
 			}
 		}
 		
 		final protected function getError() {
-			return $this->ex;
+			return $this->error;
 		}
 		
 		final protected function getState() {
-			if ($this->isTerminated()) {
-				return 
-					PROMISABLE::FAILED;
-			}
+			if ($this->isTerminated())
+				return PROMISABLE::FAILED;
 
 			switch ($this->state) {
 				case PROMISABLE::PENDING:

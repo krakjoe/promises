@@ -62,3 +62,5 @@ This is a work in progress
 
 *Note that, this is a work in progress, that does not aim for maximum compatibility with any established standard but rather
 an easy to use implementation, that is compatible with and takes full advantage of pthreads.*
+
+*While reading the API, remember everything you read other than PromiseManager is a **pthreads** object*

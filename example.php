@@ -21,6 +21,8 @@ namespace {
 		public function onError(Promisable $promised) {
 			printf(
 				"Errors !!\n");
+			
+			var_dump($promised->getError());
 		}
 	}
 
