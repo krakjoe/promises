@@ -37,7 +37,7 @@ namespace pthreads {
 				->getPromised();
 			
 			switch ($promised->getState()) {
-				case PROMISABLE::FAILED:
+				case PROMISABLE::ERROR:
 					$this->onError($promised);
 				break;
 				

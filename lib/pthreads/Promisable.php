@@ -20,7 +20,7 @@ namespace pthreads {
 	abstract class Promisable extends \Stackable implements IPromisable {
 		const PENDING = 0;
 		const FULFILLED = 1;
-		const FAILED = 2;
+		const ERROR = 2;
 		
 		public function onFulfill() {}
 		
@@ -29,7 +29,7 @@ namespace pthreads {
 			try {
 				$this->onFulfill();
 			} catch (\Exception $ex) {
-				$this->setState(PROMISABLE::FAILED, $ex);
+				$this->setState(PROMISABLE::ERROR, $ex);
 			} finally {
 				switch ($this->state) {
 					case PROMISABLE::PENDING:
@@ -46,7 +46,7 @@ namespace pthreads {
 		
 		final protected function getState() {
 			if ($this->isTerminated())
-				return PROMISABLE::FAILED;
+				return PROMISABLE::ERROR;
 
 			switch ($this->state) {
 				case PROMISABLE::PENDING:
