@@ -18,9 +18,9 @@
  */
 namespace pthreads {
 
-	final class Promise extends \Stackable {
+	final class Promise extends Promisable {
 
-		public function __construct($manager, \Stackable $promised) {
+		public function __construct($manager, Promisable $promised) {
 			if (!($manager instanceof PromiseManager) &&
 				(!is_array($manager) || !($manager[0] instanceof PromiseManager))) {
 				throw new InvalidArgumentException(

@@ -18,15 +18,15 @@
  */
 namespace pthreads {
 	
-	abstract class Thenable extends \Stackable implements Fulfillable {
+	abstract class Thenable extends Promisable implements Fulfillable {
 
 		final public function __construct(Promise $promise) {
 			$this->promise = $promise;
 		}
 
-		public function onComplete(\Stackable $promised) {}
-		public function onError(\Stackable $promised) {}
-		public function onProgress(\Stackable $promised) {}
+		public function onComplete(Promisable $promised) {}
+		public function onError(Promisable $promised) {}
+		public function onProgress(Promisable $promised) {}
 
 		final public function getPromise() { 
 			return $this->promise; 
