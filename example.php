@@ -12,25 +12,30 @@ namespace {
 		public function onFulfill() {
 			$this->meaning = 42;
 		}
+		
+		public $meaning;
 	}
 	
-	class ProcessError extends Thenable {
-		
+	/* this is optional */
+	trait ErrorDetector {
 		public function onError(Promisable $promised) {
-			printf("Errors !!\n");
+			printf(
+				"Errors !!\n");
 		}
 	}
 
 	class AddTwo extends Thenable {
-
-		public function onComplete(Promisable $promised) {
+		use ErrorDetector;
+		
+		public function onFulfilled(Promisable $promised) {
 			$promised->meaning += 2;
 		}
 	}
 
 	class PrintMeaning extends Thenable {
-
-		public function onComplete(Promisable $promised) {
+		use ErrorDetector;
+		
+		public function onFulfilled(Promisable $promised) {
 			printf(
 				"The meaning of life + 2: %d\n", 
 				$promised->meaning);
@@ -41,8 +46,6 @@ namespace {
 	$promise = 
 		new Promise($manager, new CalculateTheMeaningOfLife());
 	$promise
-		->then(
-			new ProcessError($promise))
 		->then(
 			new AddTwo($promise))
 		->then(

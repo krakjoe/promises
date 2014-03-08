@@ -34,7 +34,7 @@ IPromisable
 
 IThenable
 	
-	public void IThenable::onComplete(Promisable $promised);
+	public void IThenable::onFulfilled(Promisable $promised);
 	public void IThenable::onError(Promisable $promised);
 
 Notes

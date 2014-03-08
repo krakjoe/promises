@@ -19,7 +19,7 @@
 namespace pthreads {
 
 	interface IThenable {
-		public function onComplete(Promisable $promised);
-		public function onError(Promisable $promised);
+		public function onFulfilled	(Promisable $promised);
+		public function onError		(Promisable $promised);
 	}
 }

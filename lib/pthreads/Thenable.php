@@ -24,8 +24,8 @@ namespace pthreads {
 			$this->promise = $promise;
 		}
 
-		public function onComplete(Promisable $promised) {}
-		public function onError(Promisable $promised) {}
+		public function onFulfilled	(Promisable $promised) {}
+		public function onError		(Promisable $promised) {}
 
 		final public function getPromise() { 
 			return $this->promise; 
@@ -42,7 +42,7 @@ namespace pthreads {
 				break;
 				
 				default:
-					$this->onComplete($promised);
+					$this->onFulfilled($promised);
 			}
 		}
 
