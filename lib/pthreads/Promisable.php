@@ -17,45 +17,59 @@
   +----------------------------------------------------------------------+
  */
 namespace pthreads {
-
-	final class Promise extends Promisable {
-
-		public function __construct($manager, Promisable $promised) {
-			if (!($manager instanceof PromiseManager) &&
-				(!is_array($manager) || !($manager[0] instanceof PromiseManager))) {
-				throw new InvalidArgumentException(
-					"The manager passed to constructor was invalid,".
-					" expected PromiseManager or [PromiseManager, int]");
+	abstract class Promisable extends \Stackable implements IPromisable {
+		const PENDING = 0;
+		const FULFILLED = 1;
+		const FAILED = 2;
+		
+		public function onFulfill() {}
+		
+		public function run() {
+			try {
+				$this
+					->onFulfill();
+				$this
+					->setState(PROMISABLE::FULFILLED);
+			} catch (\Exception $ex) {
+				$this
+					->setState(PROMISABLE::FAILED, $ex);
 			}
-			
-			if (is_array($manager)) {
-				$this->manager = $manager[0];
-				$this->worker  = $manager[0]
-					->submitTo($manager[1], $promised);
-			} else {
-				$this->worker  = $manager
-					->submit($promised);
-				$this->manager = $manager;
-			}
-			
-			$this->promised = $promised;
-		}
-
-		public function then(Thenable $thenable) {
-			return $this->manager
-				->manage($this, $thenable);
-		}
-
-		public function getWorker() 				{ return $this->worker;	}
-		public function getManager()				{ return $this->manager; }
-		public function getPromised($key = null)	{
-			if ($key != null)
-				return $this->promised[$key];
-			return $this->promised;
 		}
 		
-		protected $manager;
-		protected $worker;
-		protected $promised;
+		final protected function getError() {
+			return $this->ex;
+		}
+		
+		final protected function getState() {
+			if ($this->isTerminated()) {
+				return 
+					PROMISABLE::FAILED;
+			}
+
+			switch ($this->state) {
+				case PROMISABLE::PENDING:
+				case null:
+					return PROMISABLE::PENDING;
+					
+				default:
+					return $this->state;
+			}
+		}
+		
+		final protected function setState($state, $error = null) {
+			switch ($this->getState()) {
+				case PROMISABLE::FULFILLED:
+					throw new \RuntimeException(
+						"illegal attempt to set the state of fulfilled Promiable");
+				return;
+				
+				default:
+					$this->state = $state;
+					$this->error = $error;
+			}
+		}
+		
+		protected $state;
+		protected $error;
 	}
 }
