@@ -26,7 +26,6 @@ namespace pthreads {
 
 		public function onComplete(Promisable $promised) {}
 		public function onError(Promisable $promised) {}
-		public function onProgress(Promisable $promised) {}
 
 		final public function getPromise() { 
 			return $this->promise; 
@@ -37,7 +36,6 @@ namespace pthreads {
 				->getPromise()
 				->getPromised();
 			
-			$this->onProgress($promised);
 			switch ($promised->getState()) {
 				case PROMISABLE::FAILED:
 					$this->onError($promised);
