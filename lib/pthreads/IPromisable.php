@@ -18,9 +18,7 @@
  */
 namespace pthreads {
 
-	interface Fulfillable {
-		public function onComplete(\Promisable $promised);
-		public function onError(\Promisable $promised);
-		public function onProgress(\Promisable $promised);
+	interface IPromisable {
+		public function onFulfill();
 	}
 }

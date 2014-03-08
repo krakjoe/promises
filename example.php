@@ -1,7 +1,5 @@
 <?php
-
-
-namespace {	
+namespace {
 	include_once(sprintf(
 		"%s/lib/bootstrap.php", dirname(__FILE__)));
 
@@ -11,7 +9,7 @@ namespace {
 	use \pthreads\Thenable;
 	
 	class CalculateTheMeaningOfLife extends Promisable {
-		public function run() {
+		public function onFulfill() {
 			$this->meaning = 42;
 		}
 	}

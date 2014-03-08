@@ -18,7 +18,7 @@
  */
 namespace pthreads {
 	
-	abstract class Thenable extends Promisable implements Fulfillable {
+	abstract class Thenable extends Promisable implements IThenable {
 
 		final public function __construct(Promise $promise) {
 			$this->promise = $promise;
@@ -33,14 +33,19 @@ namespace pthreads {
 		}
 
 		final public function run() {
-			$promised = $this	
+			$promised = $this
 				->getPromise()
 				->getPromised();
-
-			$this->onProgress($promised);			
-			if ($promised->isTerminated()) {
-				$this->onError($promised);
-			} else $this->onComplete($promised);
+			
+			$this->onProgress($promised);
+			switch ($promised->getState()) {
+				case PROMISABLE::FAILED:
+					$this->onError($promised);
+				break;
+				
+				default:
+					$this->onComplete($promised);
+			}
 		}
 
 		protected $promise;

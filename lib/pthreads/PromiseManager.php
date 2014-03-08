@@ -24,9 +24,9 @@ namespace pthreads {
 				$size, $worker, $ctor);
 		}
 
-		public function manage(Promise $promise, Fulfillable $fulfill) {
+		public function manage(Promise $promise, Thenable $thenable) {
 			return new Promise(
-				[$this, $promise->getWorker()], $fulfill);
+				[$this, $promise->getWorker()], $thenable);
 		}
 	}
 }

@@ -18,43 +18,9 @@
  */
 namespace pthreads {
 
-	final class Promise extends Promisable {
-
-		public function __construct($manager, Promisable $promised) {
-			if (!($manager instanceof PromiseManager) &&
-				(!is_array($manager) || !($manager[0] instanceof PromiseManager))) {
-				throw new InvalidArgumentException(
-					"The manager passed to constructor was invalid,".
-					" expected PromiseManager or [PromiseManager, int]");
-			}
-			
-			if (is_array($manager)) {
-				$this->manager = $manager[0];
-				$this->worker = $manager[0]
-					->submitTo($manager[1], $promised);
-			} else {
-				$this->worker = $manager
-					->submit($promised);
-				$this->manager = $manager;
-			}
-			$this->promised = $promised;
-		}
-
-		public function then(Thenable $thenable) {
-			return $this->manager
-				->manage($this, $thenable);
-		}
-
-		public function getWorker() 				{ return $this->worker;	}
-		public function getManager()				{ return $this->manager; }
-		public function getPromised($key = null)	{
-			if ($key != null)
-				return $this->promised[$key];
-			return $this->promised;
-		}
-		
-		protected $manager;
-		protected $worker;
-		protected $promised;
+	interface IThenable {
+		public function onComplete(\Promisable $promised);
+		public function onError(\Promisable $promised);
+		public function onProgress(\Promisable $promised);
 	}
 }
