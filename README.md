@@ -8,20 +8,20 @@ Promise Manager
 
 The Promise Manager represents a pool of threads used to fulfill promises asynchronously.
 
-The only public API for the Promise Manager is the constructor:
+The only public API for the ```PromiseManager``` is the constructor:
 
-	public function __construct($size = 4, $worker = \Worker::class, $ctor = [])
+	public PromiseManager::__construct($size = 4, $worker = \Worker::class, $ctor = [])
 
-See Pool::__construct in the PHP manual; it is inherited from Pool.
+See ```Pool::__construct``` in the PHP manual.
 
 Promise
 =======
 
-A Promise represents a promise to execute the public interface of a Promisable at some time in the future:
+A ```Promise``` represents a promise to execute the public interface of a ```Promisable``` at some time in the future:
 
 	public Promise Promise::__construct(PromiseManager $manager, Promisable $promisable)
 
-A Promise provides the ability to schedule the subsequent execution of the public interface of a Thenable.
+A ```Promise``` provides the ability to schedule the subsequent execution of the public interface of a ```Thenable```.
 
 	public Promise Promise::then(Thenable $then)
 
@@ -40,9 +40,7 @@ IThenable
 Notes
 =====
 
-Exceptions thrown by IPromisable objects will be caught and bubble up to invoke IThenable::onError
-
-Please see example.php
+Exceptions thrown by ```IPromisable``` objects will be caught and bubble up to invoke ```IThenable::onError```.
 
 ```php
 $manager = new PromiseManager();
@@ -63,4 +61,4 @@ This is a work in progress
 Note that, this is a work in progress, that does not aim for maximum compatibility with any established standard but rather
 an easy to use implementation, that is compatible with and takes full advantage of pthreads.
 
-While reading the API, remember everything you read other than PromiseManager is a *pthreads* object
+While reading the API, remember everything you read other than ```PromiseManager``` is a *pthreads* object
