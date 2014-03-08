@@ -21,11 +21,17 @@ namespace pthreads {
 	final class Promise extends \Stackable {
 
 		public function __construct($manager, \Stackable $promised) {
+			if (!($manager instanceof PromiseManager) &&
+				(!is_array($manager) || !($manager[0] instanceof PromiseManager))) {
+				throw new InvalidArgumentException(
+					"The manager passed to constructor was invalid,".
+					" expected PromiseManager or [PromiseManager, int]");
+			}
+			
 			if (is_array($manager)) {
-				$this->worker = $manager[1];
-				$manager[0]->submitTo(
-					$manager[1], $promised);
 				$this->manager = $manager[0];
+				$this->worker = $manager[0]
+					->submitTo($manager[1], $promised);
 			} else {
 				$this->worker = $manager
 					->submit($promised);
@@ -38,7 +44,7 @@ namespace pthreads {
 			return $this->manager
 				->manage($this, $fulfill);
 		}
-		
+
 		public function getWorker() 				{ return $this->worker;	}
 		public function getManager()				{ return $this->manager; }
 		public function getPromised($key = null)	{

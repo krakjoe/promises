@@ -36,9 +36,8 @@ namespace pthreads {
 			$promised = $this	
 				->getPromise()
 				->getPromised();
-				
-			$this->onProgress($promised);
-			
+
+			$this->onProgress($promised);			
 			if ($promised->isTerminated()) {
 				$this->onError($promised);
 			} else $this->onComplete($promised);
