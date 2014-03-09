@@ -36,13 +36,17 @@ namespace pthreads {
 				->getPromise()
 				->getPromised();
 			
-			switch ($promised->getState()) {
-				case PROMISABLE::ERROR:
-					$this->onError($promised);
-				break;
+			try {
+				switch ($promised->getState()) {
+					case PROMISABLE::ERROR:
+						$this->onError($promised);
+					break;
 				
-				default:
-					$this->onFulfilled($promised);
+					default: 
+						$this->onFulfilled($promised);
+				}
+			} catch (\Exception $ex) {
+				$promised->setState(PROMISABLE::ERROR, $ex);
 			}
 		}
 

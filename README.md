@@ -40,7 +40,7 @@ IThenable
 Notes
 =====
 
-Exceptions thrown by ```IPromisable``` objects will be caught and bubble up to invoke ```IThenable::onError```.
+Exceptions thrown by ```Proimisable```, or ```Thenable``` objects will be caught and bubble up to invoke subsequent ```Thenable::onError```.
 
 ```php
 $manager = new PromiseManager();

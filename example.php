@@ -11,6 +11,9 @@ namespace {
 	class CalculateTheMeaningOfLife extends Promisable {
 		public function onFulfill() {
 			$this->meaning = 42;
+			
+			/* Throwing an exception here will cause invocation of 
+				AddTwo::onError */
 		}
 		
 		public $meaning;
@@ -20,9 +23,7 @@ namespace {
 	trait ErrorDetector {
 		public function onError(Promisable $promised) {
 			printf(
-				"Errors !!\n");
-			
-			var_dump($promised->getError());
+				"Oh noes: %s\n", (string) $promised->getError());
 		}
 	}
 
@@ -31,6 +32,9 @@ namespace {
 		
 		public function onFulfilled(Promisable $promised) {
 			$promised->meaning += 2;
+
+			/* throwing an exception here will cause invocation of 
+				PrintMeaning::onError */
 		}
 	}
 
@@ -41,6 +45,8 @@ namespace {
 			printf(
 				"The meaning of life + 2: %d\n", 
 				$promised->meaning);
+			
+			/* You can access exceptions thrown here using $promised->getError */
 		}
 	}
 

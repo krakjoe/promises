@@ -59,15 +59,17 @@ namespace pthreads {
 		}
 		
 		final protected function setState($state, $error = null) {
-			switch ($this->getState()) {
+			switch ($state) {
 				case PROMISABLE::FULFILLED:
-					throw new \RuntimeException(
-						"illegal attempt to set the state of fulfilled Promiable");
+				case PROMISABLE::PENDING:
+				case PROMISABLE::ERROR:
+					$this->state = $state;
+					$this->error = $error;
 				return;
 				
 				default:
-					$this->state = $state;
-					$this->error = $error;
+					throw new \RuntimeException(
+						"attempt to set unrecognized state ({$state})");
 			}
 		}
 		
