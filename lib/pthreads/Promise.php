@@ -17,7 +17,7 @@
   +----------------------------------------------------------------------+
  */
 namespace pthreads {
-
+	
 	final class Promise extends Promisable {
 
 		public function __construct($manager, Promisable $promised) {
