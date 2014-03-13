@@ -17,23 +17,12 @@
   +----------------------------------------------------------------------+
  */
 namespace pthreads {
-	class PromiseWorker extends \Worker {
-		public function run(){}
-	}
-	
 	class PromiseManager extends \Pool {
-		public function __construct($size = 4, $worker = PromiseWorker::class, $ctor = []) {
-			parent::__construct(
-				$size, $worker, $ctor);
-		}
-
 		public function manage(Promise $promise, Thenable $thenable) {
 			return new Promise(
 				[$this, $promise->getWorker()], $thenable);
 		}
 		
-		public function __destruct() {
-			parent::__destruct();
-		}
+		public function hasWork() { return count($this->work); }
 	}
 }

@@ -17,13 +17,11 @@
   +----------------------------------------------------------------------+
  */
 namespace pthreads {
-	abstract class Promisable extends \Stackable implements IPromisable {
+	abstract class Promisable extends \Threaded implements IPromisable {
 		const PENDING = 0;
 		const FULFILLED = 1;
 		const ERROR = 2;
-		
-		public function onFulfill() {}
-		
+
 		public function run() {
 			$this->setState(PROMISABLE::PENDING);
 			try {
@@ -39,12 +37,8 @@ namespace pthreads {
 				}
 			}
 		}
-		
-		final protected function getError() {
-			return $this->error;
-		}
-		
-		final protected function getState() {
+
+		protected function getState() {
 			if ($this->isTerminated())
 				return PROMISABLE::ERROR;
 
@@ -58,7 +52,7 @@ namespace pthreads {
 			}
 		}
 		
-		final protected function setState($state, $error = null) {
+		protected function setState($state, $error = null) {
 			switch ($state) {
 				case PROMISABLE::FULFILLED:
 				case PROMISABLE::PENDING:
@@ -72,6 +66,10 @@ namespace pthreads {
 						"attempt to set unrecognized state ({$state})");
 			}
 		}
+		
+		protected function getError() { return $this->error; }
+		
+		public function onFulfill() {}
 		
 		protected $state;
 		protected $error;

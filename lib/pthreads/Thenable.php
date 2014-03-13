@@ -20,18 +20,18 @@ namespace pthreads {
 	
 	abstract class Thenable extends Promisable implements IThenable {
 
-		final public function __construct(Promise $promise) {
+		public function __construct(Promise $promise) {
 			$this->promise = $promise;
 		}
 
 		public function onFulfilled	(Promisable $promised) {}
 		public function onError		(Promisable $promised) {}
 
-		final public function getPromise() { 
+		public function getPromise() { 
 			return $this->promise; 
 		}
 
-		final public function run() {
+		public function run() {
 			$promised = $this
 				->getPromise()
 				->getPromised();
