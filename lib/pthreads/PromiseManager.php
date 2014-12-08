@@ -20,9 +20,9 @@ namespace pthreads {
 
 	class PromiseManager extends \Pool {
 
-	    public function __construct($workers = 4, $class = \Worker::class, $ctor = []) {
-	        parent::__construct($workers, $class, $ctor);
-	    }
+		public function __construct($workers = 4, $class = \Worker::class, $ctor = []) {
+			parent::__construct($workers, $class, $ctor);
+		}
 	    
 		public function manage(Promise $promise, Thenable $thenable) {
 			return new Promise(
