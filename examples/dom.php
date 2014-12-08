@@ -1,7 +1,7 @@
 <?php
 namespace {
 	include_once(sprintf(
-		"%s/../lib/bootstrap.php", dirname(__FILE__)));
+		"%s/../vendor/autoload.php", dirname(__FILE__)));
 
 	use \pthreads\PromiseManager;
 	use \pthreads\Promise;
