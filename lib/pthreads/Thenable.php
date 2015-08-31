@@ -27,27 +27,26 @@ namespace pthreads {
 		public function onFulfilled	(Promisable $promised) {}
 		public function onError		(Promisable $promised) {}
 
-		public function getPromise() { 
-			return $this->promise; 
-		}
-
+		public function getPromise() { return $this->promise; }
 		public function run() {
 			$promised = $this
 				->getPromise()
 				->getPromised();
-			
-			try {
-				switch ($promised->getState()) {
-					case PROMISABLE::ERROR:
-						$this->onError($promised);
-					break;
-				
-					default: 
-						$this->onFulfilled($promised);
+
+			$promised->synchronized(function() use($promised) {
+				try {
+					switch ($promised->getState()) {
+						case PROMISABLE::ERROR:
+							$this->onError($promised);
+						break;
+
+						default: 
+							$this->onFulfilled($promised);
+					}
+				} catch (\Exception $ex) {
+					$promised->setState(PROMISABLE::ERROR, $ex);
 				}
-			} catch (\Exception $ex) {
-				$promised->setState(PROMISABLE::ERROR, $ex);
-			}
+			});
 		}
 
 		protected $promise;

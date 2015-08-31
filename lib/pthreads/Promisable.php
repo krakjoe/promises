@@ -17,7 +17,7 @@
   +----------------------------------------------------------------------+
  */
 namespace pthreads {
-	abstract class Promisable extends \Threaded implements IPromisable {
+	abstract class Promisable extends \Collectable implements IPromisable {
 		const PENDING = 0;
 		const FULFILLED = 1;
 		const ERROR = 2;
@@ -38,38 +38,41 @@ namespace pthreads {
 			}
 		}
 
-		protected function getState() {
-			if ($this->isTerminated())
-				return PROMISABLE::ERROR;
+		public function getState() {
+			return $this->synchronized(function(){
+				if ($this->isTerminated())
+					return PROMISABLE::ERROR;
 
-			switch ($this->state) {
-				case PROMISABLE::PENDING:
-				case null:
-					return PROMISABLE::PENDING;
+				switch ($this->state) {
+					case PROMISABLE::PENDING:
+					case null:
+						return PROMISABLE::PENDING;
 					
-				default:
-					return $this->state;
-			}
+					default:
+						return $this->state;
+				}
+			});
 		}
 		
-		protected function setState($state, $error = null) {
-			switch ($state) {
-				case PROMISABLE::FULFILLED:
-				case PROMISABLE::PENDING:
-				case PROMISABLE::ERROR:
-					$this->state = $state;
-					$this->error = $error;
-				return;
+		public function setState($state, $error = null) {
+			$this->synchronized(function() use($state, $error) {
+				switch ($state) {
+					case PROMISABLE::FULFILLED:
+					case PROMISABLE::PENDING:
+					case PROMISABLE::ERROR:
+						$this->state = $state;
+						$this->error = $error;
+					return;
 				
-				default:
-					throw new \RuntimeException(
-						"attempt to set unrecognized state ({$state})");
-			}
+					default:
+						throw new \RuntimeException(
+							"attempt to set unrecognized state ({$state})");
+				}
+			});
 		}
 		
-		protected function getError() { return $this->error; }
-		
-		public function onFulfill() {}
+		public function getError() { return $this->error; }
+		public function onFulfill() { }
 		
 		protected $state;
 		protected $error;

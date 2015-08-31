@@ -27,7 +27,7 @@ namespace pthreads {
 					"The manager passed to constructor was invalid,".
 					" expected PromiseManager or [PromiseManager, int]");
 			}
-			
+
 			if (is_array($manager)) {
 				$this->manager = $manager[0];
 				$this->worker  = $manager[0]
@@ -42,8 +42,7 @@ namespace pthreads {
 		}
 
 		public function then(Thenable $thenable) {
-			return $this->manager
-				->manage($this, $thenable);
+			return $this->manager->manage($this, $thenable);
 		}
 
 		public function getWorker() 				{ return $this->worker;	}

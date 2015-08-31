@@ -18,11 +18,62 @@
  */
 namespace pthreads {
 
-	class PromiseManager extends \Pool {
-
-		public function __construct($workers = 4, $class = \Worker::class, $ctor = []) {
-			parent::__construct($workers, $class, $ctor);
+	class Pool {
+		public function __construct($size = 1, $class = \Worker::class, $ctor = []) {
+			$this->size = $size;
+			$this->class = $class;
+			$this->ctor = $ctor;
+			$this->last = 0;
+			$this->workers = [];
 		}
+
+		public function submit(\Collectable $work) {
+			if ($this->last > $this->size)
+				$this->last = 0;
+
+			if (!isset($this->workers[$this->last])) {
+				$this->workers[$this->last] = 
+					new $this->class(...$this->ctor);
+				$this->workers[$this->last]->start();
+			}
+
+			if ($this->workers[$this->last]->stack($work)) {
+				$worker = $this->last;
+				$this->last++;
+				return $worker;
+			}
+		}
+
+		public function submitTo(int $worker, \Collectable $work) {
+			if (isset($this->workers[$worker])) {
+				if ($this->workers[$worker]->stack($work)) {
+					return $worker;
+				}
+			}
+		}
+
+		public function collect(Closure $collector) {
+			$total = 0;
+			foreach ($this->workers as $worker)
+				$total += $worker->collect($collector);
+			return $total;
+		}
+
+		public function shutdown() {
+			foreach ($this->workers as $worker) {
+				$worker->shutdown();
+			}
+			unset($this->workers);
+		}
+		
+		private $workers;
+		private $size;
+		private $class;
+		private $ctor;
+		private $last;	
+	}
+
+	class PromiseManager extends Pool {
 	    
 		public function manage(Promise $promise, Thenable $thenable) {
 			return new Promise(
