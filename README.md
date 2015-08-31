@@ -19,7 +19,7 @@ Promise
 
 A ```Promise``` represents a promise to execute the public interface of a ```Promisable``` at some time in the future:
 
-	public Promise Promise::__construct(PromiseManager $manager, Promisable $promisable)
+	public Promise::__construct(PromiseManager $manager, Promisable $promisable)
 
 A ```Promise``` provides the ability to schedule the subsequent execution of the public interface of a ```Thenable```.
 
