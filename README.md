@@ -6,7 +6,7 @@ Promises in PHP using **pthreads v1.0.0+**
 Promise Manager
 ===============
 
-The Promise Manager represents a pool of threads used to fulfill promises asynchronously.
+The Promise Manager represents a pool of threads used to fulfill promises in parallel.
 
 The only public API for the ```PromiseManager``` is the constructor:
 
