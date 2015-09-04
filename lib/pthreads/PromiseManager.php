@@ -38,9 +38,7 @@ namespace pthreads {
 			}
 
 			if ($this->workers[$this->last]->stack($work)) {
-				$worker = $this->last;
-				$this->last++;
-				return $worker;
+				return $this->last++;
 			}
 		}
 
@@ -70,7 +68,7 @@ namespace pthreads {
 		private $size;
 		private $class;
 		private $ctor;
-		private $last;	
+		private $last;
 	}
 
 	class PromiseManager extends Pool {
