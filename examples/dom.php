@@ -9,11 +9,10 @@ namespace {
 	use \pthreads\Thenable;
 	
 	class SafeLogger extends Threaded {
-		protected function log($message, $args = []) {
-			$args = func_get_args();
-			if (($message = array_shift($args))) {
-				echo vsprintf("{$message}\n", $args);
-			}
+		public function log($message, ... $args) {
+			$this->synchronized(function() use($message, $args){
+				printf($message, ...$args);
+			});
 		}
 	}
 	
@@ -22,14 +21,12 @@ namespace {
 		public function __construct(SafeLogger $logger, $name) {
 			$this->setLogger($logger);
 			$this->setName($name);
-			$this->setData(null);
-			$this->setGarbage(false);
 		}
 		
 		public function onFulfill() {
 			$data = file_get_contents(
 				"http://php.net/{$this->name}");
-			
+
 			if (!$data) {
 				throw new \RuntimeException(
 					"failed to download documentation for {$this->name}");
@@ -50,9 +47,6 @@ namespace {
 		public function setDescription($text) 			{ $this->description = trim((string) $text); }
 		public function getDescription() 				{ return $this->description; }
 		
-		public function setGarbage($garbage)			{ $this->garbage = $garbage; }
-		public function isGarbage()						{ return $this->garbage; }
-		
 		protected $logger;
 		protected $name;
 		protected $data;
@@ -65,7 +59,7 @@ namespace {
 			$promised->getLogger()
 				->log("Oh noes: %s\n", (string) $promised->getError());
 			/* allow the object to be collected */
-			$promised->setGarbage(true);
+			$promised->setGarbage();
 		}
 	}
 
@@ -76,9 +70,9 @@ namespace {
 			$dom = new DOMDocument();
 			if (@$dom->loadHTML($promised->getData())) {
 				$xpath = new DOMXPath($dom);
-				foreach ($xpath->query("//p[@class='para rdfs-comment']") as $found) {
+				foreach ($xpath->query("//span[@class='dc-title']") as $found) {
 					$promised
-						->setDescription($found->textContent);
+						->setDescription($found->nodeValue);
 					break;
 				}
 			} else {
@@ -97,7 +91,7 @@ namespace {
 					$promised->getName(), 
 					$promised->getDescription());
 			/* allow the object to be collected */
-			$promised->setGarbage(true);
+			$promised->setGarbage();
 		}
 	}
 
@@ -123,14 +117,9 @@ namespace {
 	}
 	
 	/* begin to collect ... */
-	while ($manager->hasWork()) {
-		$manager->collect(function($task){
-			return $task->isGarbage();
-		});
-		
-		/* no need to collect agressively */
-		usleep(500000);
-	}
+	while ($manager->collect(function($task){
+		return $task->isGarbage();
+	})) continue;
 	
 	/* we are done */
 	$manager->shutdown();
