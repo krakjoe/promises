@@ -79,6 +79,7 @@ namespace {
 				throw new \RuntimeException(
 					"failed to load HTML at {$promised->url}");
 			}
+			$this->setGarbage();
 		}
 	}
 	
@@ -92,6 +93,7 @@ namespace {
 					$promised->getDescription());
 			/* allow the object to be collected */
 			$promised->setGarbage();
+			$this->setGarbage();
 		}
 	}
 
