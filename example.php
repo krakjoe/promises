@@ -6,7 +6,7 @@ namespace {
 	use \pthreads\Promise;
 	use \pthreads\Promisable;
 	use \pthreads\Thenable;
-	
+
 	class CalculateTheMeaningOfLife extends Promisable {
 		public function onFulfill() {
 			$this->meaning = 42;

@@ -27,7 +27,8 @@ namespace pthreads {
 		public function onFulfilled	(Promisable $promised) {}
 		public function onError		(Promisable $promised) {}
 
-		public function getPromise() { return $this->promise; }
+		public function getPromise() : Promise { return $this->promise; }
+
 		public function run() {
 			$promised = $this
 				->getPromise()

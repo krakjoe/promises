@@ -51,7 +51,6 @@ namespace {
 		protected $name;
 		protected $data;
 		protected $description;
-		protected $garbage;
 	}
 	
 	trait DOMError {

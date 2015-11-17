@@ -17,7 +17,7 @@
   +----------------------------------------------------------------------+
  */
 namespace pthreads {
-	abstract class Promisable extends \Collectable implements IPromisable {
+	abstract class Promisable extends \Threaded implements IPromisable {
 		const PENDING = 0;
 		const FULFILLED = 1;
 		const ERROR = 2;
@@ -38,7 +38,7 @@ namespace pthreads {
 			}
 		}
 
-		public function getState() {
+		public function getState() : int {
 			return $this->synchronized(function(){
 				if ($this->isTerminated())
 					return PROMISABLE::ERROR;
@@ -73,8 +73,12 @@ namespace pthreads {
 		
 		public function getError() { return $this->error; }
 		public function onFulfill() { }
-		
+
+		public function isGarbage() : bool { return $this->garbage; }
+		public function setGarbage() { $this->garbage = true; }		
+	
 		protected $state;
 		protected $error;
+		private $garbage;
 	}
 }
